@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página con imagen, título y formulario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Blanco */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333; /* Negro */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff; /* Blanco */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #007bff; /* Azul */
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #007bff; /* Azul */
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px; /* Espacio entre botones */
+        }
+
+            button[type="submit"] {
+                margin-right: 10px;
+            }
+
+                button[type="submit"]:hover {
+                    background-color: #218838; /* Verde más oscuro */
+                }
+
+            button[type="button"] {
+                background-color: #007bff; /* Azul */
+                color: #fff; /* Blanco */
+            }
+
+                button[type="button"]:hover {
+                    background-color: #0056b3; /* Azul más oscuro */
+                }
+
+            /* Estilo para botones deshabilitados */
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+        .mensaje {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff; /* Azul */
+            color: #fff; /* Blanco */
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Bienvenido!</h1>
+
+        <img src="~/Images/ute.jpg" alt="Imagen Ejemplo">
+
+        @using (Html.BeginForm("sinEncriptar", "Home", FormMethod.Post, new { id = "sinEncriptar_form" }))
+        {
+            <label for="entradaTexto1">Introduce tu texto:</label>
+            <input type="text" id="entradaTexto1" name="entradaTexto1" onkeyup="habilitarBotones()">
+
+            <button type="submit" id="btnSinEncriptar" disabled style="background-color: #28a745;">Obtener usuarios normales</button>
+        }
+
+        @using (Html.BeginForm("encriptar", "Home", FormMethod.Post, new { id = "encriptar_form" }))
+        {
+            <label for="entradaTexto2">Introduce tu texto:</label>
+            <input type="text" id="entradaTexto2" name="entradaTexto2" onkeyup="habilitarBotones()">
+
+            <button type="submit" id="btnEncriptar" style="background-color: #007bff;" disabled>Obtener usuarios encriptados</button>
+        }
+
+        <div class="mensaje" style="background-color: #808080;">@ViewBag.Mensaje</div>
+    </div>
+
+    <script>
+        function habilitarBotones() {
+            var texto1 = document.getElementById('entradaTexto1').value;
+            var texto2 = document.getElementById('entradaTexto2').value;
+            var btnSinEncriptar = document.getElementById('btnSinEncriptar');
+            var btnEncriptar = document.getElementById('btnEncriptar');
+
+            if (texto1.trim() !== '') {
+                btnSinEncriptar.disabled = false;
+            } else {
+                btnSinEncriptar.disabled = true;
+            }
+
+            if (texto2.trim() !== '') {
+                btnEncriptar.disabled = false;
+            } else {
+                btnEncriptar.disabled = true;
+            }
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('entradaTexto1').value = '';
+            document.getElementById('entradaTexto2').value = '';
+            habilitarBotones();
+        }
+    </script>
+</body>
+</html>

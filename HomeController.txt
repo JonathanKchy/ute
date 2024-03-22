@@ -1,0 +1,123 @@
+﻿using ProyectoUTE.Data;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Web.Mvc;
+
+namespace TuProyecto.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            ViewBag.Mensaje = "Respuesta"; // Inicializamos el mensaje vacío
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult sinEncriptar(string entradaTexto1)
+        {
+            
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConexionDB.rutaConexion))
+                {
+                   
+                    List<string> resultados = new List<string>();
+
+                    string sqlQuery = "select nombre from usuario where clave ='" + entradaTexto1 + "'";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, conn))
+                    {
+                        // Agrega parámetros para prevenir SQL Injection
+                        //string sqlQuery = "select nombre from usuario where clave = @Parametro";
+                        command.Parameters.AddWithValue("@Parametro", entradaTexto1);
+
+                        //cambiamos el orden                       
+                        //string sqlQuery = "select nombre from usuario where " + entradaTexto1 + "=clave";
+                        try
+                        {
+                            conn.Open();
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                resultados.Add(reader["nombre"].ToString());
+                            }
+
+                            reader.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.Mensaje = "Error al ejecutar consulta: " + ex.Message;
+                            return View("Index");
+                        }
+                    }
+                    string resultadoStr = string.Join(", ", resultados);
+                    conn.Close();
+                    ViewBag.Mensaje = "Resultados del SELECT: " + resultadoStr;
+                    return View("Index");
+                    
+
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return View("Index");
+        }
+
+
+        [HttpPost]
+        public ActionResult encriptar(string entradaTexto2)
+        {
+
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConexionDB.rutaConexion))
+                {
+
+                    List<string> resultados = new List<string>();
+
+                    string sqlQuery = "select nombre from UsuarioEncriptado where clave ='" + entradaTexto2 + "'";
+                    using (SqlCommand command = new SqlCommand(sqlQuery, conn))
+                    {
+                        // Agrega parámetros para prevenir SQL Injection
+                        //string sqlQuery = "select nombre from usuario where clave = @Parametro";
+                        command.Parameters.AddWithValue("@Parametro", entradaTexto2);
+
+                        //cambiamos el orden                       
+                        //string sqlQuery = "select nombre from UsuarioEncriptado where " + entradaTexto2 + "=clave";
+                        try
+                        {
+                            conn.Open();
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                resultados.Add(reader["nombre"].ToString());
+                            }
+
+                            reader.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            ViewBag.Mensaje = "Error al ejecutar consulta: " + ex.Message;
+                            return View("Index");
+                        }
+                    }
+                    string resultadoStr = string.Join(", ", resultados);
+                    conn.Close();
+                    ViewBag.Mensaje = "Resultados del SELECT: " + resultadoStr;
+                    return View("Index");
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return View("Index");
+        }
+    }
+}

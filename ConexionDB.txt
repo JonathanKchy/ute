@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ProyectoUTE.Data
+{
+    public class ConexionDB
+    {
+        public static string rutaConexion = "Data Source = ip; Initial Catalog = bdd; User ID = usuario; Password=Kclave";
+    }
+}
